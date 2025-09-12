@@ -104,7 +104,11 @@ def business_detail(request, pk):
 @permission_classes([AllowAny])
 def product_list_create(request):
     if request.method == 'GET':
-        products = Product.objects.all()
+        business_id = request.GET.get('business_id')
+        if business_id:
+            products = Product.objects.filter(business_id=business_id)
+        else:
+            products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -139,7 +143,11 @@ def product_detail(request, pk):
 @permission_classes([AllowAny])
 def review_list_create(request):
     if request.method == 'GET':
-        reviews = Review.objects.all()
+        business_id = request.GET.get('business_id')
+        if business_id:
+            reviews = Review.objects.filter(product__business_id=business_id)
+        else:
+            reviews = Review.objects.all()
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
