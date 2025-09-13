@@ -25,9 +25,9 @@ const BusinessProfile = () => {
             'Content-Type': 'application/json'
           }
         };
-        const { data: biz } = await axios.get(`http://localhost:8000/api/businesses/${stored.id}/`, headers);
-        const { data: allProducts } = await axios.get('http://localhost:8000/api/products/', headers);
-        const { data: allReviews } = await axios.get(`http://localhost:8000/api/reviews/?business_id=${stored.id}`, headers);
+  const { data: biz } = await axios.get(`/api/businesses/${stored.id}/`, headers);
+  const { data: allProducts } = await axios.get('/api/products/', headers);
+  const { data: allReviews } = await axios.get(`/api/reviews/?business_id=${stored.id}`, headers);
 
         setBusiness(biz);
         setProducts(allProducts.filter(p => p.business === stored.id));

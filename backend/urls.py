@@ -14,11 +14,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path 
+from django.urls import path
+from django.http import HttpResponse
 from core import views
 
+def home(request):
+    return HttpResponse("Welcome to RateSmart API!")
+
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/signup/', views.signup_business, name='signup_business'),
     path('api/login/', views.login_business, name='login_business'),

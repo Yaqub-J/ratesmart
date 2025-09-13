@@ -34,9 +34,9 @@ const BusinessDashboard = () => {
           return;
         }
         const headers = getAuthHeaders();
-        const businessRes = await axios.get('http://localhost:8000/api/businesses/me/', headers);
-        const productsRes = await axios.get('http://localhost:8000/api/products/', headers);
-        const reviewsRes = await axios.get(`http://localhost:8000/api/reviews/?business_id=${businessRes.data.id}`, headers);
+  const businessRes = await axios.get('/api/businesses/me/', headers);
+  const productsRes = await axios.get('/api/products/', headers);
+  const reviewsRes = await axios.get(`/api/reviews/?business_id=${businessRes.data.id}`, headers);
 
         setBusinessData(businessRes.data);
         setProducts(productsRes.data.filter(p => p.business === businessRes.data.id));
@@ -83,7 +83,7 @@ const BusinessDashboard = () => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:8000/api/businesses/${businessData.id}/`,
+  `/api/businesses/${businessData.id}/`,
         businessData,
         getAuthHeaders()
       );
@@ -100,7 +100,7 @@ const BusinessDashboard = () => {
     if (!window.confirm('Are you sure you want to delete your business? 🚫')) return;
     try {
       await axios.delete(
-        `http://localhost:8000/api/businesses/${businessData.id}/`,
+  `/api/businesses/${businessData.id}/`,
         getAuthHeaders()
       );
       handleLogout();
@@ -113,7 +113,7 @@ const BusinessDashboard = () => {
   const addProduct = async (name) => {
     try {
       const { data: newProd } = await axios.post(
-        'http://localhost:8000/api/products/',
+  '/api/products/',
         { business: businessData.id, name },
         getAuthHeaders()
       );
@@ -126,7 +126,7 @@ const BusinessDashboard = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/products/${id}/`, getAuthHeaders());
+  await axios.delete(`/api/products/${id}/`, getAuthHeaders());
       setProducts(products.filter((p) => p.id !== id));
     } catch (err) {
       console.error('Delete product error:', err.response);
@@ -145,7 +145,7 @@ const BusinessDashboard = () => {
       await Promise.all(
         reviews.map((r) =>
           axios.put(
-            `http://localhost:8000/api/reviews/${r.id}/`,
+            `/api/reviews/${r.id}/`,
             { reply: r.reply },
             getAuthHeaders()
           )

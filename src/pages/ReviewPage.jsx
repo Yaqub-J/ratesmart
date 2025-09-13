@@ -18,7 +18,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-        const { data } = await axios.get('http://localhost:8000/api/businesses/');
+  const { data } = await axios.get('/api/businesses/');
         setBusinesses(data);
       } catch (err) {
         console.error('Error fetching businesses:', err.response);
@@ -43,7 +43,7 @@ const ReviewPage = () => {
   const handleBusinessSelect = async (business) => {
     setSelectedBusiness(business);
     try {
-      const { data: allProducts } = await axios.get('http://localhost:8000/api/products/');
+  const { data: allProducts } = await axios.get('/api/products/');
       const filtered = allProducts.filter(p => p.business === business.id);
       setProducts(filtered);
     } catch (err) {
@@ -59,7 +59,7 @@ const ReviewPage = () => {
 
     try {
       const product = products.find(p => p.name === selectedProduct);
-      await axios.post('http://localhost:8000/api/reviews/', {
+  await axios.post('/api/reviews/', {
         business_name: selectedBusiness.name,
         product: product.id,
         customer_name: customerName,

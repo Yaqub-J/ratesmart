@@ -13,7 +13,7 @@ const SearchPage = () => {
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-        const { data } = await axios.get('http://localhost:8000/api/businesses/');
+  const { data } = await axios.get('/api/businesses/');
         setAllBusinesses(data);
       } catch (err) {
         console.error('Fetch businesses error:', err.response);
