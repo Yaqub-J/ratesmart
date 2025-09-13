@@ -12,6 +12,73 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+.nav-hamburger {
+  display: none;
+  cursor: pointer;
+  font-size: 2rem;
+  margin-left: auto;
+}
+
+.hamburger-icon {
+  color: white;
+  font-size: 2rem;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 260px;
+  background: linear-gradient(135deg, #0b615e 0%, #34caa1 100%);
+  color: white;
+  z-index: 2000;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar.open {
+  transform: translateX(0);
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px 10px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.close-icon {
+  font-size: 2rem;
+  cursor: pointer;
+  color: white;
+}
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+}
+.sidebar .nav-btn {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 4px;
+}
+.sidebar .user-greeting {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 1500;
+}
+
 .nav-left .nav-brand {
   font-size: 1.8rem;
   font-weight: bold;
@@ -112,32 +179,15 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .nav-center, .nav-right {
+    display: none;
+  }
+  .nav-hamburger {
+    display: block;
+  }
   .navigation {
-    flex-direction: column;
+    flex-direction: row;
     padding: 10px 15px;
     gap: 10px;
-  }
-
-  .nav-center {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .nav-right {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .nav-btn {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .user-greeting {
-    font-size: 12px;
-    text-align: center;
-    width: 100%;
   }
 }

@@ -7,13 +7,12 @@ const Navigation = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [userType, setUserType] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Check what type of user is logged in
     const businessUser = localStorage.getItem('loggedInBusiness');
     const adminUser = localStorage.getItem('loggedInAdmin');
     const accessToken = localStorage.getItem('access_token');
-
     if (businessUser && accessToken) {
       setUser(JSON.parse(businessUser));
       setUserType('business');
@@ -31,105 +30,59 @@ const Navigation = () => {
     localStorage.removeItem('business');
     setUser(null);
     setUserType(null);
+    setSidebarOpen(false);
     navigate('/');
   };
 
-  // Don't show navigation on login/signup pages
   const hideNavPaths = ['/business-login', '/business-signup', '/admin-login'];
   if (hideNavPaths.includes(location.pathname)) {
     return null;
   }
 
   return (
-    <nav className="navigation">
-      <div className="nav-left">
-        <h2 className="nav-brand" onClick={() => navigate('/')}>
-          📊 RateSmart
-        </h2>
-      </div>
-
-      <div className="nav-center">
-        <button 
-          className="nav-btn" 
-          onClick={() => navigate('/')}
-        >
-          🏠 Home
-        </button>
-        <button 
-          className="nav-btn" 
-          onClick={() => navigate('/search-page')}
-        >
-          🔍 Search Businesses
-        </button>
-        <button 
-          className="nav-btn" 
-          onClick={() => navigate('/review')}
-        >
-          📝 Leave Review
-        </button>
-      </div>
-
-      <div className="nav-right">
-        {user ? (
-          <>
-            <span className="user-greeting">
-              {userType === 'admin' ? '👑' : '🏢'} Welcome, {user.name}!
-            </span>
-            {userType === 'business' && (
-              <>
-                <button 
-                  className="nav-btn dashboard-btn" 
-                  onClick={() => navigate('/business-dashboard')}
-                >
-                  📊 Dashboard
-                </button>
-                <button 
-                  className="nav-btn profile-btn" 
-                  onClick={() => navigate('/Profile')}
-                >
-                  👤 Profile
-                </button>
-              </>
-            )}
-            {userType === 'admin' && (
-              <button 
-                className="nav-btn dashboard-btn" 
-                onClick={() => navigate('/admin-dashboard')}
-              >
-                👑 Admin Panel
-              </button>
-            )}
-            <button 
-              className="nav-btn logout-btn" 
-              onClick={handleLogout}
-            >
-              🚪 Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <button 
-              className="nav-btn login-btn" 
-              onClick={() => navigate('/business-login')}
-            >
-              🔑 Business Login
-            </button>
-            <button 
-              className="nav-btn signup-btn" 
-              onClick={() => navigate('/business-signup')}
-            >
-              ✨ Business Signup
-            </button>
-            <button 
-              className="nav-btn admin-btn" 
-              onClick={() => navigate('/admin-login')}
-            >
-              👑 Admin
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
+    <>
+      <nav className="navigation">
+        <div className="nav-left">
+          <h2 className="nav-brand" onClick={() => navigate('/')}>📊 RateSmart</h2>
+        </div>
+        <div className="nav-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <span className="hamburger-icon">&#9776;</span>
+        </div>
+      </nav>
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h2 className="nav-brand" onClick={() => {navigate('/'); setSidebarOpen(false);}}>📊 RateSmart</h2>
+          <span className="close-icon" onClick={() => setSidebarOpen(false)}>&times;</span>
+        </div>
+        <div className="sidebar-links">
+          <button className="nav-btn" onClick={() => {navigate('/'); setSidebarOpen(false);}}>🏠 Home</button>
+          <button className="nav-btn" onClick={() => {navigate('/search-page'); setSidebarOpen(false);}}>🔍 Search Businesses</button>
+          <button className="nav-btn" onClick={() => {navigate('/review'); setSidebarOpen(false);}}>📝 Leave Review</button>
+          {user ? (
+            <>
+              <span className="user-greeting">{userType === 'admin' ? '👑' : '🏢'} Welcome, {user.name}!</span>
+              {userType === 'business' && (
+                <>
+                  <button className="nav-btn dashboard-btn" onClick={() => {navigate('/business-dashboard'); setSidebarOpen(false);}}>📊 Dashboard</button>
+                  <button className="nav-btn profile-btn" onClick={() => {navigate('/Profile'); setSidebarOpen(false);}}>👤 Profile</button>
+                </>
+              )}
+              {userType === 'admin' && (
+                <button className="nav-btn dashboard-btn" onClick={() => {navigate('/admin-dashboard'); setSidebarOpen(false);}}>👑 Admin Panel</button>
+              )}
+              <button className="nav-btn logout-btn" onClick={handleLogout}>🚪 Logout</button>
+            </>
+          ) : (
+            <>
+              <button className="nav-btn login-btn" onClick={() => {navigate('/business-login'); setSidebarOpen(false);}}>🔑 Business Login</button>
+              <button className="nav-btn signup-btn" onClick={() => {navigate('/business-signup'); setSidebarOpen(false);}}>✨ Business Signup</button>
+              <button className="nav-btn admin-btn" onClick={() => {navigate('/admin-login'); setSidebarOpen(false);}}>👑 Admin</button>
+            </>
+          )}
+        </div>
+      </aside>
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>}
+    </>
   );
 };
 
