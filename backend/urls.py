@@ -29,5 +29,6 @@ urlpatterns = [
     path('api/products/<int:pk>/', views.product_detail, name='product_detail'),
     path('api/reviews/', views.review_list_create, name='review_list_create'),
     path('api/reviews/<int:pk>/', views.review_detail, name='review_detail'),
-    path('admin/reset/', views.reset_system, name='reset_system'),
+    path('api/admin/login/', views.admin_login, name='admin_login'),
+    path('api/admin/reset/', views.reset_system, name='reset_system'),
 ]

@@ -179,6 +179,29 @@ def review_detail(request, pk):
         return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
+def admin_login(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    if not email or not password:
+        return Response({'error': 'Email and password required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        admin_user = Business.objects.get(email=email, is_superuser=True)
+        if admin_user.check_password(password):
+            refresh = RefreshToken.for_user(admin_user)
+            serializer = BusinessSerializer(admin_user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'admin': serializer.data
+            })
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    except Business.DoesNotExist:
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])  
 def reset_system(request):
     user = request.user

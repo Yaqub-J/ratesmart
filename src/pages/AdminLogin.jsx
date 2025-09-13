@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
@@ -7,28 +8,30 @@ const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const existingAdmin = localStorage.getItem('adminUser');
-    if (!existingAdmin) {
-      localStorage.setItem(
-        'adminUser',
-        JSON.stringify({ email: 'admin@example.com', password: 'admin123' })
-      );
-    }
-  }, []);
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const storedAdmin = JSON.parse(localStorage.getItem('adminUser'));
+    setLoading(true);
+    setErrorMsg('');
 
-    if (storedAdmin && storedAdmin.email === email && storedAdmin.password === password) {
-      localStorage.setItem('access_token', 'admin-token'); 
-      localStorage.setItem('loggedInAdmin', JSON.stringify(storedAdmin));
+    try {
+      const response = await axios.post('http://localhost:8000/api/admin/login/', {
+        email,
+        password
+      });
+
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+      localStorage.setItem('loggedInAdmin', JSON.stringify(response.data.admin));
+      
       navigate('/admin-dashboard');
-    } else {
-      setErrorMsg('Invalid admin credentials!');
-      setTimeout(() => setErrorMsg(''), 2000);
+    } catch (err) {
+      console.error('Admin login error:', err.response);
+      setErrorMsg(err.response?.data?.error || 'Invalid admin credentials!');
+      setTimeout(() => setErrorMsg(''), 3000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +54,9 @@ const AdminLogin = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
         <p className="back-link" onClick={() => navigate('/')}>
           Not an admin? Go back to Homepage
         </p>

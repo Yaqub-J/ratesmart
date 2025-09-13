@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navigation from './components/Navigation';
 import HomePage from './pages/Homepage';
 import BusinessSignup from './pages/BusinessSignup';
 import BusinessLogin from './pages/BusinessLogin';
@@ -12,6 +13,7 @@ import ThankYouPage from './pages/ThankYouPage';
 function App() {
   return (
     <Router>
+      <Navigation />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/business-signup" element={<BusinessSignup />} />
