@@ -31,7 +31,7 @@ const SearchPage = () => {
     if (match) {
       localStorage.setItem('business', JSON.stringify(match));
       localStorage.setItem('loggedInBusiness', JSON.stringify(match));
-      navigate('/profile');
+      navigate('/Profile');
     } else {
       setError('Business not found');
       setTimeout(() => setError(''), 2000);

@@ -276,6 +276,7 @@ const BusinessDashboard = () => {
                       <td>
                         {r.sentiment === 'positive' && '😊 Positive'}
                         {r.sentiment === 'neutral' && '😐 Neutral'}
+                        {r.sentiment === 'negative' && '☹ Negative'}
                         {!r.sentiment && 'N/A'}
                       </td>
                       <td>{r.is_fake ? 'Yes 🚩' : 'No'}</td>

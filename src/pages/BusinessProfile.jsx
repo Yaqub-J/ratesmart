@@ -128,7 +128,7 @@ const BusinessProfile = () => {
 
       <div className="nav-buttons">
         <button onClick={() => navigate('/')}>🏠 Back to Home</button>
-        <button onClick={() => navigate('/search')}>🔍 Go to Business List</button>
+        <button onClick={() => navigate('/search-page')}>🔍 Go to Business List</button>
       </div>
     </div>
   );

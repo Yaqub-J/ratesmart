@@ -9,7 +9,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200vh;
+  min-height: 100vh;
   
 }
 
@@ -30,7 +30,8 @@ body {
 }
 
 .signup-form input,
-.signup-form select {
+.signup-form select,
+.signup-form textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 16px;
@@ -38,10 +39,12 @@ body {
   border-radius: 6px;
   transition: border-color 0.3s ease;
   font-size: 14px;
+  font-family: inherit;
 }
 
 .signup-form input:focus,
-.signup-form select:focus {
+.signup-form select:focus,
+.signup-form textarea:focus {
   border-color: #34caa1;
   outline: none;
 }

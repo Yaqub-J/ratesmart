@@ -36,7 +36,7 @@ class Business(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone', 'country', 'state', 'hours']
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 
@@ -49,7 +49,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.name} ({self.business.name}) 📦"
 
 
@@ -81,7 +81,7 @@ class Review(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.customer_name} - {self.product.name} ({self.rating}⭐)"
 
     def analyze_sentiment(self):
