@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-&aog3xw93bwgkag&b6hj1r@tzqt279k6v3v1e+$_o5e4$ot2u-
 
 DEBUG = True  # Remember to set False in production!
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ratesmart.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
