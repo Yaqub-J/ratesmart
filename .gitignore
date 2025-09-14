@@ -22,3 +22,32 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 db.sql*
+
+# Backend specific
+backend/staticfiles/
+backend/media/
+backend/logs/
+backend/backend/db.sqlite3
+backend/*.sqlite3
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+
+# IDE
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Deployment
+.vercel
+dist/

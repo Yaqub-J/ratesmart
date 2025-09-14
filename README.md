@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# RateSmart
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive business rating and review platform built with React frontend and Django backend.
+
+## Architecture
+
+- **Frontend**: React application (Create React App)
+- **Backend**: Django REST API with JWT authentication
+- **Database**: PostgreSQL (SQLite for development)
+
+## Quick Start
+
+### Development Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Yaqub-J/ratesmart.git
+   cd ratesmart
+   ```
+
+2. **Frontend Setup**
+   ```bash
+   npm install
+   npm start
+   ```
+
+3. **Backend Setup**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   python manage.py migrate
+   python manage.py runserver
+   ```
+
+## Deployment
+
+### Production Deployment (Vercel + Render)
+
+This project is optimized for deployment on:
+- **Frontend**: Vercel
+- **Backend**: Render.com
+
+#### Quick Deployment Check
+```bash
+./verify-deployment.sh
+```
+
+#### Detailed Instructions
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
+
+### Environment Variables
+
+#### Frontend (.env.production)
+```
+REACT_APP_API_URL=https://your-backend.onrender.com
+REACT_APP_ENV=production
+```
+
+#### Backend (.env)
+```
+DJANGO_SECRET_KEY=your-secret-key
+DJANGO_DEBUG=False
+DJANGO_ALLOWED_HOSTS=your-backend.onrender.com
+DATABASE_URL=postgresql://...
+CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app
+```
+
+## Features
+
+- Business registration and management
+- User reviews and ratings
+- Admin dashboard
+- JWT authentication
+- Search functionality
+- Responsive design
 
 ## Available Scripts
 
-In the project directory, you can run:
+### Frontend
+- `npm start` - Development server
+- `npm run build` - Production build
+- `npm test` - Run tests
 
-### `npm start`
+### Backend
+- `python manage.py runserver` - Development server
+- `python manage.py migrate` - Run migrations
+- `python manage.py collectstatic` - Collect static files
+- `./build.sh` - Production build script
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Contributing
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-### `npm test`
+## License
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.
