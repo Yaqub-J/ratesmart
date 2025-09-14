@@ -3,7 +3,7 @@ services:
     name: ratesmart-backend
     env: python
     buildCommand: "cd backend && chmod +x build.sh && ./build.sh"
-    startCommand: "cd backend && source venv/bin/activate && gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "cd backend && PYTHONPATH=backend ./venv/bin/python -m gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
     plan: free
     envVars:
       - key: PYTHON_VERSION

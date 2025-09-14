@@ -3,9 +3,9 @@
 set -o errexit
 
 # Modify this line as needed for your package manager (pip, poetry, etc.)
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 
-# Change to backend directory for Django commands
+# Change to inner backend directory for Django commands
 cd backend
 
 # Add current directory to Python path for module imports
