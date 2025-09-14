@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axios';
 import './SearchPage.css';
 
 const SearchPage = () => {
@@ -13,11 +13,13 @@ const SearchPage = () => {
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-  const { data } = await axios.get('/api/businesses/');
-        setAllBusinesses(data);
+        const response = await axios.get('/api/businesses/');
+        // Ensure we're setting an array, even if empty
+        setAllBusinesses(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
-        console.error('Fetch businesses error:', err.response);
+        console.error('Fetch businesses error:', err);
         setError('Failed to load businesses');
+        setAllBusinesses([]); // Ensure we always have an array
         setTimeout(() => setError(''), 2000);
       }
     };
@@ -25,9 +27,16 @@ const SearchPage = () => {
   }, []);
 
   const handleSearch = () => {
+    if (!Array.isArray(allBusinesses)) {
+      setError('No businesses available');
+      setTimeout(() => setError(''), 2000);
+      return;
+    }
+
     const match = allBusinesses.find(b =>
-      b.name.toLowerCase() === searchTerm.toLowerCase()
+      b && b.name && b.name.toLowerCase() === searchTerm.toLowerCase()
     );
+    
     if (match) {
       localStorage.setItem('business', JSON.stringify(match));
       localStorage.setItem('loggedInBusiness', JSON.stringify(match));
@@ -41,8 +50,19 @@ const SearchPage = () => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
+    
+    if (!Array.isArray(allBusinesses)) {
+      setSuggestions([]);
+      return;
+    }
+
+    if (value.trim() === '') {
+      setSuggestions([]);
+      return;
+    }
+
     const matches = allBusinesses.filter(b =>
-      b.name.toLowerCase().includes(value.toLowerCase())
+      b && b.name && b.name.toLowerCase().includes(value.toLowerCase())
     );
     setSuggestions(matches.slice(0, 5));
   };
