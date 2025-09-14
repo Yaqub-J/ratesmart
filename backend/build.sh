@@ -2,8 +2,8 @@
 # Exit on error
 set -o errexit
 
-# Upgrade pip
-python -m pip install --upgrade pip
+# Upgrade pip and setuptools
+python -m pip install --upgrade pip setuptools wheel
 
 # Install Python dependencies
 pip install -r requirements.txt
