@@ -10,11 +10,7 @@ trap 'echo "❌ Error on line $LINENO. Exit code: $?"' ERR
 echo "📁 Creating necessary directories..."
 mkdir -p static media logs
 
-# Upgrade pip and setuptools
-echo "⚙️ Upgrading pip and setuptools..."
-python -m pip install --upgrade pip setuptools wheel
-
-# Install Python dependencies
+# Install Python dependencies (skip pip upgrade in CI/CD)
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt
 
@@ -38,8 +34,13 @@ python manage.py migrate --no-input
 if [ -n "$DJANGO_SUPERUSER_EMAIL" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
     echo "👤 Creating superuser..."
     python manage.py shell -c "
-from core.management.commands.create_superuser import create_superuser
-create_superuser()
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(email='$DJANGO_SUPERUSER_EMAIL').exists():
+    User.objects.create_superuser(email='$DJANGO_SUPERUSER_EMAIL', password='$DJANGO_SUPERUSER_PASSWORD')
+    print('Superuser created successfully')
+else:
+    print('Superuser already exists')
 "
 fi
 
