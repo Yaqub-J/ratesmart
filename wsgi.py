@@ -11,5 +11,8 @@ import sys
 backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend')
 sys.path.insert(0, backend_path)
 
-# Import the Django WSGI application from backend
+# Set Django settings module
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
+# Import the Django WSGI application from the inner backend directory
 from backend.wsgi import application
