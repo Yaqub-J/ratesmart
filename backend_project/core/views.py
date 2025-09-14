@@ -6,6 +6,23 @@ from .models import Business, Product, Review
 from .serializers import BusinessSerializer, ProductSerializer, ReviewSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db.models import Q, Avg
+from django.http import JsonResponse
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def api_root(request):
+    """API root endpoint"""
+    return Response({
+        'message': 'RateSmart API is running',
+        'version': '1.0.0',
+        'endpoints': {
+            'businesses': '/businesses/',
+            'reviews': '/reviews/',
+            'signup': '/signup/',
+            'login': '/login/',
+            'search': '/businesses/search/',
+        }
+    })
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -68,16 +85,23 @@ def current_business(request):
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def business_list_create(request):
-    if request.method == 'GET':
-        businesses = Business.objects.all()
-        serializer = BusinessSerializer(businesses, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = BusinessSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        if request.method == 'GET':
+            businesses = Business.objects.all()
+            serializer = BusinessSerializer(businesses, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            serializer = BusinessSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({
+            'error': f'Internal server error: {str(e)}',
+            'method': request.method,
+            'path': request.path
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -139,17 +163,24 @@ def product_detail(request, pk):
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def review_list_create(request):
-    if request.method == 'GET':
-        reviews = Review.objects.all()
-        serializer = ReviewSerializer(reviews, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        data = request.data.copy()
-        serializer = ReviewSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        if request.method == 'GET':
+            reviews = Review.objects.all()
+            serializer = ReviewSerializer(reviews, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            data = request.data.copy()
+            serializer = ReviewSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({
+            'error': f'Internal server error: {str(e)}',
+            'method': request.method,
+            'path': request.path
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
