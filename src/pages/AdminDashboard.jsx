@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './AdminDashboard.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,11 +37,11 @@ const AdminDashboard = () => {
   );
 
   const fetchBusinesses = useCallback(() => {
-    return fetchWithAuth('http://localhost:8000/api/businesses/', setBusinesses);
+    return fetchWithAuth(`${API_BASE_URL}/businesses/`, setBusinesses);
   }, [fetchWithAuth]);
 
   const fetchReviews = useCallback(() => {
-    return fetchWithAuth('http://localhost:8000/api/reviews/', setReviews);
+    return fetchWithAuth(`${API_BASE_URL}/reviews/`, setReviews);
   }, [fetchWithAuth]);
 
   const fetchData = useCallback(async () => {
@@ -67,7 +68,7 @@ const AdminDashboard = () => {
   const handleDeleteBusiness = async (id) => {
     if (window.confirm('Delete this business? 🚫')) {
       try {
-        await axios.delete(`http://localhost:8000/api/businesses/${id}/`, {
+        await axios.delete(`${API_BASE_URL}/businesses/${id}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
@@ -83,7 +84,7 @@ const AdminDashboard = () => {
   const handleDeleteReview = async (id) => {
     if (window.confirm('Delete this review? 🚫')) {
       try {
-        await axios.delete(`http://localhost:8000/api/reviews/${id}/`, {
+        await axios.delete(`${API_BASE_URL}/reviews/${id}/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
@@ -101,7 +102,7 @@ const AdminDashboard = () => {
       try {
         const token = localStorage.getItem('access_token');
         await axios.post(
-          'http://localhost:8000/api/admin/reset/',
+          `${API_BASE_URL}/admin/reset/`,
           {},
           { headers: { Authorization: `Bearer ${token} `} }
         );

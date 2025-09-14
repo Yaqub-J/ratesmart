@@ -1,13 +1,15 @@
 from pathlib import Path
 from datetime import timedelta
+from decouple import config, Csv
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-&aog3xw93bwgkag&b6hj1r@tzqt279k6v3v1e+$_o5e4$ot2u-'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-&aog3xw93bwgkag&b6hj1r@tzqt279k6v3v1e+$_o5e4$ot2u-')
 
-DEBUG = True  # Remember to set False in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,ratesmart.onrender.com', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +63,12 @@ DATABASES = {
     }
 }
 
+# Override with PostgreSQL if DATABASE_URL is provided (for production)
+DATABASE_URL = config('DATABASE_URL', default=None)
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
@@ -72,7 +81,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Whitenoise configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -90,10 +103,13 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# CORS Configuration — allow only localhost:3000 for development
+# CORS Configuration — allow frontend origins
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://ratesmart-eosin.vercel.app',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = "core.Business"

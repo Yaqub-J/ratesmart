@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './BusinessSignup.css';
 
 const countryStates = {
@@ -67,7 +68,7 @@ const BusinessSignup = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/signup/', {
+      const response = await axios.post(`${API_BASE_URL}/signup/`, {
         name: businessName,
         phone,
         email,

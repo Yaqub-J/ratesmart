@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './BusinessLogin.css';
 
 function BusinessLogin() {
@@ -19,7 +20,7 @@ function BusinessLogin() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/login/', {
+      const response = await axios.post(`${API_BASE_URL}/login/`, {
         email: formData.email,
         password: formData.password
       });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './ReviewPage.css';
 
 const ReviewPage = () => {
@@ -18,7 +19,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
-        const { data } = await axios.get('http://localhost:8000/api/businesses/');
+        const { data } = await axios.get(`${API_BASE_URL}/businesses/`);
         setBusinesses(data);
       } catch (err) {
         console.error('Error fetching businesses:', err.response);
@@ -43,9 +44,8 @@ const ReviewPage = () => {
   const handleBusinessSelect = async (business) => {
     setSelectedBusiness(business);
     try {
-      const { data: allProducts } = await axios.get('http://localhost:8000/api/products/');
-      const filtered = allProducts.filter(p => p.business === business.id);
-      setProducts(filtered);
+      const { data: businessProducts } = await axios.get(`${API_BASE_URL}/products/business/${business.id}/`);
+      setProducts(businessProducts);
     } catch (err) {
       console.error('Error fetching products:', err.response);
     }
@@ -59,7 +59,7 @@ const ReviewPage = () => {
 
     try {
       const product = products.find(p => p.name === selectedProduct);
-      await axios.post('http://localhost:8000/api/reviews/', {
+      await axios.post(`${API_BASE_URL}/reviews/`, {
         business_name: selectedBusiness.name,
         product: product.id,
         customer_name: customerName,

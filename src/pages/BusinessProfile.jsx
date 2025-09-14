@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './BusinessProfile.css';
 
 const BusinessProfile = () => {
@@ -25,16 +26,17 @@ const BusinessProfile = () => {
             'Content-Type': 'application/json'
           }
         };
-        const { data: biz } = await axios.get(`http://localhost:8000/api/businesses/${stored.id}/`, headers);
-        const { data: allProducts } = await axios.get('http://localhost:8000/api/products/', headers);
-        const { data: allReviews } = await axios.get(`http://localhost:8000/api/reviews/?business_id=${stored.id}`, headers);
+        const { data: biz } = await axios.get(`${API_BASE_URL}/businesses/${stored.id}/`, headers);
+        const { data: businessProducts } = await axios.get(`${API_BASE_URL}/products/business/${stored.id}/`, headers);
+        const { data: businessReviews } = await axios.get(`${API_BASE_URL}/reviews/business/${stored.id}/`, headers);
 
         setBusiness(biz);
-        setProducts(allProducts.filter(p => p.business === stored.id));
-        setReviews(allReviews);
+        setProducts(businessProducts);
+        const reviewsData = businessReviews.reviews || businessReviews;
+        setReviews(reviewsData);
 
         const distribution = {};
-        allReviews.forEach(review => {
+        reviewsData.forEach(review => {
           const star = review.rating;
           distribution[star] = (distribution[star] || 0) + 1;
         });

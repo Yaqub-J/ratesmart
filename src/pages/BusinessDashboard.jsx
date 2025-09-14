@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import './BusinessDashboard.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,13 +35,13 @@ const BusinessDashboard = () => {
           return;
         }
         const headers = getAuthHeaders();
-        const businessRes = await axios.get('http://localhost:8000/api/businesses/me/', headers);
-        const productsRes = await axios.get('http://localhost:8000/api/products/', headers);
-        const reviewsRes = await axios.get(`http://localhost:8000/api/reviews/?business_id=${businessRes.data.id}`, headers);
+        const businessRes = await axios.get(`${API_BASE_URL}/businesses/me/`, headers);
+        const productsRes = await axios.get(`${API_BASE_URL}/products/business/${businessRes.data.id}/`, headers);
+        const reviewsRes = await axios.get(`${API_BASE_URL}/reviews/business/${businessRes.data.id}/`, headers);
 
         setBusinessData(businessRes.data);
-        setProducts(productsRes.data.filter(p => p.business === businessRes.data.id));
-        setReviews(reviewsRes.data);
+        setProducts(productsRes.data);
+        setReviews(reviewsRes.data.reviews || reviewsRes.data);
         localStorage.setItem('business', JSON.stringify(businessRes.data));
         localStorage.setItem('loggedInBusiness', JSON.stringify(businessRes.data));
       } catch (err) {
@@ -83,7 +84,7 @@ const BusinessDashboard = () => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:8000/api/businesses/${businessData.id}/`,
+        `${API_BASE_URL}/businesses/${businessData.id}/`,
         businessData,
         getAuthHeaders()
       );
@@ -100,7 +101,7 @@ const BusinessDashboard = () => {
     if (!window.confirm('Are you sure you want to delete your business? 🚫')) return;
     try {
       await axios.delete(
-        `http://localhost:8000/api/businesses/${businessData.id}/`,
+        `${API_BASE_URL}/businesses/${businessData.id}/`,
         getAuthHeaders()
       );
       handleLogout();
@@ -113,7 +114,7 @@ const BusinessDashboard = () => {
   const addProduct = async (name) => {
     try {
       const { data: newProd } = await axios.post(
-        'http://localhost:8000/api/products/',
+        `${API_BASE_URL}/products/`,
         { business: businessData.id, name },
         getAuthHeaders()
       );
@@ -126,7 +127,7 @@ const BusinessDashboard = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/products/${id}/`, getAuthHeaders());
+      await axios.delete(`${API_BASE_URL}/products/${id}/`, getAuthHeaders());
       setProducts(products.filter((p) => p.id !== id));
     } catch (err) {
       console.error('Delete product error:', err.response);
@@ -145,7 +146,7 @@ const BusinessDashboard = () => {
       await Promise.all(
         reviews.map((r) =>
           axios.put(
-            `http://localhost:8000/api/reviews/${r.id}/`,
+            `${API_BASE_URL}/reviews/${r.id}/`,
             { reply: r.reply },
             getAuthHeaders()
           )

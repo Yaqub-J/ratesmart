@@ -5,6 +5,7 @@ from rest_framework import status
 from .models import Business, Product, Review
 from .serializers import BusinessSerializer, ProductSerializer, ReviewSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db.models import Q, Avg
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -187,3 +188,76 @@ def reset_system(request):
         return Response({'message': 'System reset successfully'}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': f'Error resetting system: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def business_search(request):
+    query = request.GET.get('q', '')
+    location = request.GET.get('location', '')
+    
+    businesses = Business.objects.all()
+    
+    if query:
+        businesses = businesses.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query)
+        )
+    
+    if location:
+        businesses = businesses.filter(
+            Q(country__icontains=location) | 
+            Q(state__icontains=location)
+        )
+    
+    serializer = BusinessSerializer(businesses, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def business_products(request, business_id):
+    try:
+        business = Business.objects.get(pk=business_id)
+        products = Product.objects.filter(business=business)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    except Business.DoesNotExist:
+        return Response({'error': 'Business not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def product_reviews(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+        reviews = Review.objects.filter(product=product).exclude(is_fake=True)
+        serializer = ReviewSerializer(reviews, many=True)
+        
+        # Calculate average rating
+        avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+        
+        return Response({
+            'reviews': serializer.data,
+            'average_rating': round(avg_rating, 1) if avg_rating else 0,
+            'total_reviews': reviews.count()
+        })
+    except Product.DoesNotExist:
+        return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def business_reviews(request, business_id):
+    try:
+        business = Business.objects.get(pk=business_id)
+        products = Product.objects.filter(business=business)
+        reviews = Review.objects.filter(product__in=products).exclude(is_fake=True)
+        serializer = ReviewSerializer(reviews, many=True)
+        
+        # Calculate average rating
+        avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+        
+        return Response({
+            'reviews': serializer.data,
+            'average_rating': round(avg_rating, 1) if avg_rating else 0,
+            'total_reviews': reviews.count()
+        })
+    except Business.DoesNotExist:
+        return Response({'error': 'Business not found'}, status=status.HTTP_404_NOT_FOUND)
