@@ -15,6 +15,12 @@ def api_root(request):
     return Response({
         'message': 'RateSmart API is running',
         'version': '1.0.0',
+        'debug': {
+            'host': request.get_host(),
+            'method': request.method,
+            'path': request.path,
+            'headers': dict(request.headers),
+        },
         'endpoints': {
             'businesses': '/businesses/',
             'reviews': '/reviews/',
@@ -23,6 +29,12 @@ def api_root(request):
             'search': '/businesses/search/',
         }
     })
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def test_endpoint(request):
+    """Simple test endpoint"""
+    return Response({'message': 'Test endpoint working', 'status': 'OK'})
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
