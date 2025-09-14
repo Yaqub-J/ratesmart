@@ -1,7 +1,7 @@
 """
 Root WSGI config for deployment on Render.
 
-This file imports the Django WSGI application from the backend directory.
+This file sets up Django directly without complex imports.
 """
 
 import os
@@ -11,8 +11,9 @@ import sys
 backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend')
 sys.path.insert(0, backend_path)
 
-# Set Django settings module
+# Set Django settings module for the inner backend project
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-# Import the Django WSGI application from the inner backend directory
-from backend.wsgi import application
+# Import and configure Django
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
