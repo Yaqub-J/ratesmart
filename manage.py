@@ -5,8 +5,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # Add the backend directory to Python path
-    backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend')
+    # Add the Django project directory to Python path
+    backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend_project')
     sys.path.insert(0, backend_path)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
