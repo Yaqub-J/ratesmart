@@ -13,12 +13,15 @@ echo "Backend directory contents: $(ls -la)"
 echo "Inner backend directory contents: $(ls -la backend/)"
 
 # Activate virtual environment if it exists
-if [ -d ".venv" ]; then
-    echo "Activating virtual environment from .venv"
-    source .venv/bin/activate
-elif [ -d "venv" ]; then
+if [ -d "venv" ]; then
     echo "Activating virtual environment from venv"
     source venv/bin/activate
+elif [ -d "../.venv" ]; then
+    echo "Activating virtual environment from ../.venv"
+    source ../.venv/bin/activate
+elif [ -d ".venv" ]; then
+    echo "Activating virtual environment from .venv"
+    source .venv/bin/activate
 else
     echo "No virtual environment found, proceeding without activation"
 fi
