@@ -2,7 +2,7 @@ services:
   - type: web
     name: ratesmart-backend
     env: python
-    buildCommand: "chmod +x backend/build.sh && backend/build.sh"
+    buildCommand: "chmod +x backend/build.sh && chmod +x start.sh && backend/build.sh"
     startCommand: "./start.sh"
     plan: free
     envVars:
