@@ -1,4 +1,3 @@
-import os
 """
 WSGI config for backend project.
 
@@ -8,10 +7,16 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
+import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from pathlib import Path
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+# Add the project root directory to the Python path
+BACKEND_DIR = Path(__file__).resolve().parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.append(str(BACKEND_DIR))
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
