@@ -11,8 +11,8 @@ import sys
 backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend_project')
 sys.path.insert(0, backend_path)
 
-# Set Django settings module for the inner backend project
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+# Set Django settings module for the inner django_backend project
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings')
 
 # Import and configure Django
 from django.core.wsgi import get_wsgi_application

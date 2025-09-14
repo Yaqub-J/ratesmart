@@ -9,7 +9,7 @@ def main():
     backend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backend_project')
     sys.path.insert(0, backend_path)
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
