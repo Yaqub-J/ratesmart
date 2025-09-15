@@ -3,7 +3,7 @@ services:
     name: ratesmart-backend
     env: python
     buildCommand: "pip install -r backend/requirements.txt && python backend/manage.py makemigrations && python backend/manage.py migrate && python backend/manage.py collectstatic --no-input"
-    startCommand: "gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn test_wsgi:application --bind 0.0.0.0:$PORT"
     plan: free
     envVars:
       - key: PYTHON_VERSION
